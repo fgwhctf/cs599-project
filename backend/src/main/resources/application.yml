@@ -1,0 +1,53 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: data-agent-java-ai
+  ai:
+    openai:
+      api-key: ${DASHSCOPE_API_KEY}
+      base-url: ${DASHSCOPE_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+      chat:
+        options:
+          model: ${QWEN_MODEL:qwen-plus}
+          temperature: 0.5
+      embedding:
+        options:
+          model: ${DASHSCOPE_EMBEDDING_MODEL:text-embedding-v4}
+          dimensions: ${EMBEDDING_DIMENSIONS:1024}
+
+springdotenv:
+  directory: ./backend
+  filename: .env
+  ignore-if-missing: false
+
+data-agent:
+  datasource:
+    meta:
+      jdbc-url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/meta?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      username: ${MYSQL_USER}
+      password: ${MYSQL_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    dw:
+      jdbc-url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/dw?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      username: ${MYSQL_USER}
+      password: ${MYSQL_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  qdrant:
+    base-url: http://${REMOTE_LINUX_HOST:127.0.0.1}:${QDRANT_PORT:6333}
+    column-collection: column_info_collection
+    metric-collection: metric_info_collection
+    score-threshold: 0.6
+    limit: 3
+  elasticsearch:
+    base-url: http://${REMOTE_LINUX_HOST:127.0.0.1}:${ES_PORT:9200}
+    value-index: value_index
+    score-threshold: 0.6
+    limit: 20
+
+logging:
+  file:
+    name: logs/java-ai-app.log
+  level:
+    com.fgwh: INFO
