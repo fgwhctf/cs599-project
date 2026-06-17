@@ -54,6 +54,7 @@ public class DataAgentService {
     }
 
     public AgentState run(String query, SseEventSink sink) {
+        SqlGuard.assertReadOnlyIntent(query);
         AgentState state = new AgentState(query);
 
         extractKeywords(state, sink);
@@ -245,6 +246,10 @@ public class DataAgentService {
             dwRepository.validateSql(state.getSql());
             state.setError(null);
         } catch (Exception ex) {
+            if (SqlGuard.READ_ONLY_MESSAGE.equals(ex.getMessage())) {
+                sink.progress("验证SQL", "error");
+                throw ex;
+            }
             state.setError(ex.getMessage());
         }
         sink.progress("验证SQL", "success");

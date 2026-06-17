@@ -34,7 +34,7 @@ public class QueryService {
                 emitter.complete();
             } catch (Exception ex) {
                 sink.error(ex.getMessage());
-                emitter.completeWithError(ex);
+                emitter.complete();
             }
         });
         return emitter;
