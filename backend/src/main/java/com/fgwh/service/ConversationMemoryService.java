@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class ConversationMemoryService {
 
-    private static final int MAX_TURNS = 5;
+    private static final int MAX_TURNS = 10;
 
     private final Map<String, Deque<ConversationTurn>> turnsBySession = new ConcurrentHashMap<>();
 

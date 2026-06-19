@@ -28,17 +28,17 @@ class ConversationMemoryServiceTest {
     }
 
     @Test
-    void keepsOnlyMostRecentFiveTurns() {
+    void keepsOnlyMostRecentTenTurns() {
         ConversationMemoryService memoryService = new ConversationMemoryService();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 11; i++) {
             memoryService.save("session-1", "q" + i, "rq" + i, state("rq" + i, "select " + i));
         }
 
         var turns = memoryService.recentTurns("session-1");
-        assertEquals(5, turns.size());
+        assertEquals(10, turns.size());
         assertEquals("q1", turns.getFirst().userQuery());
-        assertEquals("q5", turns.getLast().userQuery());
+        assertEquals("q10", turns.getLast().userQuery());
     }
 
     @Test
